@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon ."
+    "dev": "nodemon .",
+    "pm2:start": "pm2 start index.js",
+    "pm2:stop": "pm2 delete index",
+    "pm2:restart": "pm2 restart index",
+    "pm2:logs": "pm2 logs"
   },
   "repository": {
     "type": "git",
@@ -19,11 +23,19 @@
   },
   "homepage": "https://github.com/saptarshi1996/cronker#readme",
   "dependencies": {
+    "@prisma/client": "^4.2.1",
+    "axios": "^0.27.2",
+    "bull": "^4.8.5",
+    "bull-arena": "^3.29.5",
     "cors": "^2.8.5",
+    "decache": "^4.6.1",
     "express": "^4.18.1",
+    "glob": "^8.0.3",
     "node-schedule": "^2.1.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "pm2": "^5.2.0",
+    "prisma": "^4.2.1"
   }
 }

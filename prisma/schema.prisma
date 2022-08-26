@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum RequestMethod {
+  POST
+  GET
+}
+
+model Cron {
+  id Int @id @default(autoincrement())
+
+  name String @db.Text
+
+  cronExpression String? @db.VarChar(20)
+
+  requestMethod  RequestMethod @default(GET)
+  requestUrl     String        @db.Text
+  requestPayload String?       @db.Text
+
+  isActive Boolean? @default(true)
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  @@map("crons")
+}

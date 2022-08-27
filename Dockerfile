@@ -9,12 +9,16 @@ VOLUME [ "/var/lib/cronker/db", "/var/lib/cronker/crons" ]
 
 WORKDIR /app
 
+RUN chmod 777 /var/lib/cronker/db
+RUN chmod 777 /var/lib/cronker/crons
+
 # Move backend files and dependencies.
 COPY ./server/package*.json ./server/
 RUN cd ./server && npm install
 COPY ./server/ ./server/
 
 COPY ./prisma/ ./prisma/
+RUN cd ./prisma && npm install
 
 COPY ./client/package*.json ./client/
 RUN cd ./client && npm install

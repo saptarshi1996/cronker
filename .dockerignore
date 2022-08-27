@@ -1,5 +1,12 @@
 node_modules/
-client/node_modules/
 
+client/node_modules/
+client/.nuxt
+client/dist
+
+prisma/node_modules/
+prisma/generated/
+
+server/node_modules/
 
 crons/

@@ -110,3 +110,4 @@ crons/
 
 prisma/node_modules/
 prisma/generated/
+prisma/.env

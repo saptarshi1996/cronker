@@ -29,6 +29,7 @@
     "bull-arena": "^3.29.5",
     "cors": "^2.8.5",
     "decache": "^4.6.1",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "glob": "^8.0.3",
     "node-schedule": "^2.1.0"

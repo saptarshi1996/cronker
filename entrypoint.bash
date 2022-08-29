@@ -8,5 +8,7 @@ mysql -e "GRANT ALL ON cronker.* TO 'cronker'@'127.0.0.1';"
 mysql -e "FLUSH PRIVILEGES;"
 
 cd /app/prisma && npx prisma db push && npx prisma generate
-cd /app/server && pm2 start
+cd /app/server && pm2 start index.js
 # cd /app/client && pm2 start
+
+pm2 logs

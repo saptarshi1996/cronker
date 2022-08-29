@@ -31,7 +31,7 @@
             color="primary"
             :disabled="loading"
             text
-            @click="createCron"
+            @click.prevent="createCron"
           >
             Create
           </v-btn>
@@ -39,7 +39,7 @@
             color="primary"
             :disabled="loading"
             text
-            @click="hideCreateCronDialog"
+            @click.prevent="hideCreateCronDialog"
           >
             Close
           </v-btn>
@@ -57,7 +57,7 @@
           Update CRON
         </v-card-title>
         <v-card-text class="mt-2">
-          <v-form ref="createForm" v-model="createFormValid">
+          <v-form ref="updateForm" v-model="updateFormValid">
             <v-text-field v-model="cronUpdateData.name" :rules="nameRules" label="Name" required outlined />
             <v-text-field v-model="cronUpdateData.cronExpression" :rules="cronExpressionRules" label="Cron Expression" outlined />
           </v-form>
@@ -69,14 +69,43 @@
             text
             @click="updateCron"
           >
-            Create
+            Update
           </v-btn>
           <v-btn
             color="primary"
             text
-            @click="hideCreateCronDialog"
+            @click="hideUpdateCronDialog"
           >
             Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="cronDialogDelete"
+      persistent
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title>
+          Delete CRON?
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="primary"
+            text
+            @click="deleteCron"
+          >
+            Confirm
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            @click="hideDeleteCronDialog"
+          >
+            Cancel
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -87,7 +116,7 @@
         <v-card-title>
           CRONS
           <v-spacer />
-          <v-btn color="primary" text @click.prevent="showCreateCronDialog">
+          <v-btn color="primary" text @click.prevent="cronDialogShow = true">
             Create
           </v-btn>
         </v-card-title>
@@ -106,7 +135,11 @@
                   v-for="column in columns"
                   :key="column.id"
                 >
-                  <td>{{ column.name }}</td>
+                  <td>
+                    <v-btn link color="primary" text small :to="`/logs/${column.id}`">
+                      {{ column.name }}
+                    </v-btn>
+                  </td>
                   <td>{{ column.requestMethod }}</td>
                   <td>{{ column.requestUrl }}</td>
                   <td>{{ column.cronExpression }}</td>
@@ -114,13 +147,13 @@
                     <v-icon
                       small
                       class="mr-2"
-                      @click="updateCron(column)"
+                      @click="openUpdateCron(column)"
                     >
                       mdi-pencil
                     </v-icon>
                     <v-icon
                       small
-                      @click="deleteCron(column.id)"
+                      @click="openDeleteCron(column.id)"
                     >
                       mdi-delete
                     </v-icon>
@@ -129,8 +162,19 @@
               </tbody>
             </template>
           </v-simple-table>
-          <div v-if="columns.length === 0" class="headline text-center mt-2">No Records found</div>
+          <div v-if="columns.length === 0" class="headline text-center mt-2">
+            No Records found
+          </div>
         </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn :disabled="columns.length === 0" color="primary" text>
+            Prev
+          </v-btn>
+          <v-btn :disabled="columns.length === 0" color="primary" text>
+            Next
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
@@ -151,14 +195,20 @@ export default {
         cronPayload: ''
       },
       cronUpdateData: {
+        id: null,
         name: '',
         cronExpression: ''
       },
+      cronDeleteData: {
+        id: null
+      },
       createFormValid: false,
+      updateFormValid: false,
       requestMethodOptions: ['GET', 'POST'],
       cronUrl: 'http://localhost:8080',
       cronDialogShow: false,
       cronDialogUpdate: false,
+      cronDialogDelete: false,
       loading: false,
       nameRules: [
         v => !!v || 'Name is required'
@@ -186,31 +236,79 @@ export default {
       try {
         const { data } = await this.$axios.get(`${this.cronUrl}/cron/cronList`)
         this.columns = data.data
-      } catch (ex) {}
+      } catch (ex) {
+        this.$notify(ex.response ? ex.response.message : ex.message)
+      }
     },
 
     async createCron () {
       try {
         this.$refs.createForm.validate()
         if (this.createFormValid) {
-          const { data } = await this.$axios.post(`${this.cronUrl}/cron/createCron`, this.cronCreateData)
+          await this.$axios.post(`${this.cronUrl}/cron/createCron`, this.cronCreateData)
           this.hideCreateCronDialog()
-          console.log(data)
+          this.$notify('Cron created successfully')
+          await this.getCronList()
         }
-      } catch (ex) {}
+      } catch (ex) {
+        this.$notify(ex.response ? ex.response.message : ex.message)
+      }
     },
 
-    async updateCron (cron) {},
+    openUpdateCron (cron) {
+      this.cronDialogUpdate = true
+      this.cronUpdateData = {
+        id: cron.id,
+        name: cron.name,
+        cronExpression: cron.cronExpression
+      }
+    },
 
-    async deleteCron (id) {},
+    openDeleteCron (id) {
+      this.cronDialogDelete = true
+      this.cronDeleteData = { id }
+    },
 
-    showCreateCronDialog () {
-      this.cronDialogShow = true
+    async updateCron () {
+      try {
+        this.$refs.updateForm.validate()
+        if (this.updateFormValid) {
+          const { data } = await this.$axios.put(`${this.cronUrl}/cron/updateCron/${this.cronUpdateData.id}`, this.cronUpdateData)
+          this.hideUpdateCronDialog()
+          this.$notify(data.message)
+          await this.getCronList()
+        }
+      } catch (ex) {
+        this.$notify(ex.response ? ex.response.message : ex.message)
+      }
+    },
+
+    async deleteCron () {
+      try {
+        const { data } = await this.$axios.delete(`${this.cronUrl}/cron/deleteCron/${this.cronDeleteData.id}`)
+        this.hideDeleteCronDialog()
+        this.$notify(data.message)
+        await this.getCronList()
+      } catch (ex) {
+        this.$notify(ex.response ? ex.response.message : ex.message)
+      }
     },
 
     hideCreateCronDialog () {
       this.$refs.createForm.reset()
       this.cronDialogShow = false
+    },
+
+    hideUpdateCronDialog () {
+      this.$refs.updateForm.reset()
+      this.cronDialogUpdate = false
+    },
+
+    hideDeleteCronDialog () {
+      this.cronDeleteData = {
+        id: null
+      }
+      this.cronDialogDelete = false
     }
   }
 }

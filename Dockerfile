@@ -20,15 +20,15 @@ COPY ./server/ ./server/
 COPY ./prisma/ ./prisma/
 RUN cd ./prisma && npm install
 
-# COPY ./client/package*.json ./client/
-# RUN cd ./client && npm install
-# RUN cd ./client && npm run build
-# COPY ./client/ ./client/
+COPY ./client/package*.json ./client/
+RUN cd ./client && npm install
+RUN cd ./client && npm run build
+COPY ./client/ ./client/
 
 COPY ./entrypoint.bash ./
 
 RUN npm install pm2 -g
 
-EXPOSE 3000 8080
+EXPOSE 3000
 
 CMD [ "bash", "entrypoint.bash" ]

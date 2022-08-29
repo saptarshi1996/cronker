@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  output = "./generated"
+  provider      = "prisma-client-js"
+  output        = "./generated"
   binaryTargets = ["native", "linux-musl", "debian-openssl-1.1.x", "darwin"]
 }
 
@@ -15,6 +15,11 @@ datasource db {
 enum RequestMethod {
   POST
   GET
+}
+
+enum Status {
+  SUCCESS
+  FAILED
 }
 
 model Cron {
@@ -34,5 +39,27 @@ model Cron {
   updatedAt DateTime?
   deletedAt DateTime?
 
+  cronLog CronLog[]
+
   @@map("crons")
+}
+
+model CronLog {
+  id Int @id @default(autoincrement())
+
+  response   String @db.Text
+  statusCode Int
+  status     Status
+
+  started   DateTime
+  completed DateTime
+
+  cronId Int
+  cron   Cron @relation(fields: [cronId], references: [id])
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  @@map("cron_logs")
 }

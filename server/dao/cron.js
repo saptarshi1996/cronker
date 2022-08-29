@@ -1,4 +1,5 @@
 const { PrismaClient } = require('../../prisma/generated');
+
 const { cron } = new PrismaClient();
 
 exports.createCron = ({
@@ -19,7 +20,7 @@ exports.createCron = ({
       }
     });
     resolve(created);
-  } catch(ex) {
+  } catch (ex) {
     reject(new Error(ex.message));
   }
 });
@@ -31,7 +32,6 @@ exports.updateCron = ({
   isActive,
 }) => new Promise(async (resolve, reject) => {
   try {
-
     const data = {};
     if (name) data.name = name;
     if (cronExpression) data.cronExpression = cronExpression;
@@ -67,8 +67,7 @@ exports.deleteCron = (id) => new Promise(async (resolve, reject) => {
 
 exports.listCron = (isActive) => new Promise(async (resolve, reject) => {
   try {
-
-    let where = {};
+    const where = {};
 
     if (isActive !== undefined) where.isActive = isActive;
 
@@ -82,19 +81,17 @@ exports.listCron = (isActive) => new Promise(async (resolve, reject) => {
         requestPayload: true,
         isActive: true,
       },
-      where: where,
+      where,
     });
 
     resolve(crons);
-
   } catch (ex) {
     reject(new Error(ex.message));
   }
 });
 
 exports.getCronByName = (name) => new Promise(async (resolve, reject) => {
-    try{
-
+  try {
     const cronDetails = await cron.findFirst({
       where: {
         name,
@@ -107,15 +104,13 @@ exports.getCronByName = (name) => new Promise(async (resolve, reject) => {
     console.log(cronDetails);
 
     resolve(cronDetails);
-
   } catch (ex) {
     reject(new Error(ex.message));
   }
 });
 
 exports.getCronById = (id) => new Promise(async (resolve, reject) => {
-  try{
-
+  try {
     const cronDetails = await cron.findFirst({
       where: {
         id: +id,
@@ -132,7 +127,6 @@ exports.getCronById = (id) => new Promise(async (resolve, reject) => {
     });
 
     resolve(cronDetails);
-
   } catch (ex) {
     reject(new Error(ex.message));
   }

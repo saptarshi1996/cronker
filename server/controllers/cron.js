@@ -14,11 +14,10 @@ exports.getCronList = async (_, res) => {
       message: ex.message,
     });
   }
-}
+};
 
 exports.createNewCron = async (req, res) => {
   try {
-
     const {
       name,
       cronExpression,
@@ -27,7 +26,7 @@ exports.createNewCron = async (req, res) => {
       requestPayload,
     } = req.body;
 
-    const cronFound = await cronDao.getCronByName(name)
+    const cronFound = await cronDao.getCronByName(name);
 
     if (cronFound) {
       throw new Error('Cron already exists');
@@ -50,13 +49,12 @@ exports.createNewCron = async (req, res) => {
     return res.status(200).json({
       data: cronCreated,
     });
-
   } catch (ex) {
     return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
-}
+};
 
 exports.updateCron = async (req, res) => {
   try {
@@ -87,17 +85,15 @@ exports.updateCron = async (req, res) => {
     return res.status(200).json({
       message: 'Cron updated successfully',
     });
-
   } catch (ex) {
     return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
-}
+};
 
 exports.deleteCron = async (req, res) => {
   try {
-
     const { id } = req.params;
 
     const cronFound = await cronDao.getCronById(id);
@@ -113,10 +109,9 @@ exports.deleteCron = async (req, res) => {
     return res.status(200).json({
       message: 'Cron deleted successfully',
     });
-
   } catch (ex) {
     return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
-}
+};

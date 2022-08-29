@@ -1,5 +1,4 @@
-const FILE = (cron) => 
-`const nodeSchedule = require('node-schedule');
+const FILE = (cron) => `const nodeSchedule = require('node-schedule');
 const CronQueue = require('../config/bull');
 
 nodeSchedule.scheduleJob('${cron.cronExpression}', () => {

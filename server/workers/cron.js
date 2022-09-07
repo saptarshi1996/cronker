@@ -2,14 +2,18 @@ const axios = require('axios');
 
 const CronQueue = require('../config/bull');
 
+const cronLogDao = require('../dao/logs');
+
 CronQueue.process(async (job, done) => {
   try {
     const {
-      name,
+      id,
       requestMethod,
       requestUrl,
       requestPayload,
     } = job.data;
+
+    const started = new Date();
 
     let response;
     switch (requestMethod) {
@@ -26,8 +30,15 @@ CronQueue.process(async (job, done) => {
         break;
     }
 
-    console.log('response for ', name);
-    console.log(response);
+    const completed = new Date();
+
+    await cronLogDao.createLog({
+      status: 'SUCCESS',
+      started,
+      completed,
+      response: response.data,
+      cronId: id,
+    });
 
     done();
   } catch (ex) {

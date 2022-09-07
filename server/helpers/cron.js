@@ -7,7 +7,7 @@ exports.checkURLValid = (url = '') => {
 };
 
 exports.requireAll = () => {
-  glob.sync('./crons/*.js').forEach((file) => {
+  glob.sync('../crons/*.js').forEach((file) => {
     // eslint-disable-next-line import/no-dynamic-require
     require(path.resolve(file));
   });

@@ -48,7 +48,6 @@ model CronLog {
   id Int @id @default(autoincrement())
 
   response   String @db.Text
-  statusCode Int
   status     Status
 
   started   DateTime

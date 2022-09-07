@@ -17,7 +17,7 @@ app.use('/cron', cronRouter);
 
 require('./helpers/file').createCrons();
 
-const PORT = 8080;
+const PORT = 8081;
 const HOST = process.env.HOST || 'localhost';
 
 app.listen(+PORT, HOST, () => console.log(`Server on PORT ${PORT} ${HOST}`));

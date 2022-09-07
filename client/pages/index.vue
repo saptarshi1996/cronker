@@ -205,7 +205,7 @@ export default {
       createFormValid: false,
       updateFormValid: false,
       requestMethodOptions: ['GET', 'POST'],
-      cronUrl: 'http://localhost:8080',
+      cronUrl: 'http://localhost:8081',
       cronDialogShow: false,
       cronDialogUpdate: false,
       cronDialogDelete: false,
@@ -214,12 +214,12 @@ export default {
         v => !!v || 'Name is required'
       ],
       cronExpressionRules: [
-        v => !!v || 'Cron Expression is required',
-        v => /^(\*|([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])|\*\/([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])) (\*|([0-9]|1[0-9]|2[0-3])|\*\/([0-9]|1[0-9]|2[0-3])) (\*|([1-9]|1[0-9]|2[0-9]|3[0-1])|\*\/([1-9]|1[0-9]|2[0-9]|3[0-1])) (\*|([1-9]|1[0-2])|\*\/([1-9]|1[0-2])) (\*|([0-6])|\*\/([0-6]))$/.test(v) || 'Cron Expression must be valid'
+        v => !!v || 'Cron Expression is required'
+        // v => /^(\*|([0-9]|1[0-9]|2[0c-9]|3[0-9]|4[0-9]|5[0-9])|\*\/([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])) (\*|([0-9]|1[0-9]|2[0-3])|\*\/([0-9]|1[0-9]|2[0-3])) (\*|([1-9]|1[0-9]|2[0-9]|3[0-1])|\*\/([1-9]|1[0-9]|2[0-9]|3[0-1])) (\*|([1-9]|1[0-2])|\*\/([1-9]|1[0-2])) (\*|([0-6])|\*\/([0-6]))$/.test(v) || 'Cron Expression must be valid'
       ],
       requestUrlRules: [
-        v => !!v || 'Cron Expression is required',
-        v => /^((http(s?)?):\/\/)?([wW]{3}\.)?[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$/.test(v) || 'Request Url must be valid'
+        v => !!v || 'Cron Expression is required'
+        // v => /^((http(s?)?):\/\/)?([wW]{3}\.)?[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$/.test(v) || 'Request Url must be valid'
       ],
       requestPayloadRules: [
         v => JSON.parse(v) || 'Request payload must be a valid JSON'

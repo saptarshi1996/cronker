@@ -40,3 +40,22 @@ exports.clearLogs = ({
     reject(new Error(ex.message));
   }
 });
+
+exports.getLogs = ({
+  cronId,
+}) => new Promise(async (resolve, reject) => {
+  try {
+    const crons = await cronLog.findMany({
+      where: {
+        cronId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    resolve(crons);
+  } catch (ex) {
+    reject(new Error(ex.message));
+  }
+});

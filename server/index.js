@@ -13,8 +13,6 @@ app.use(cors());
 
 app.use('/cron', cronRouter);
 
-// app.use('/arena', arena);
-
 require('./helpers/file').createCrons();
 
 const PORT = 8081;

@@ -1,5 +1,7 @@
 import Express from 'express'
 
+import cors from 'cors'
+
 import loader from "../config/cron"
 
 import environment from '../config/environment'
@@ -19,6 +21,7 @@ app.use(Express.json())
 app.use(Express.urlencoded({
   extended: false
 }))
+app.use(cors())
 
 app.use(cronRoute)
 

@@ -1,9 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 
 import ICron from '../interfaces/models/cron'
+import ICronLog from '../interfaces/models/cron-log'
 
 const {
   cron: Cron,
+  cronLog: CronLog,
 } = new PrismaClient()
 
 export const listAllCron = ({
@@ -82,6 +84,17 @@ export const deleteCron = ({
   try {
     await Cron.delete({
       where,
+    })
+    resolve({})
+  } catch (ex: any) {
+    reject(new Error(ex.message))
+  }
+})
+
+export const createCronLog = (data: ICronLog) => new Promise(async (resolve, reject) => {
+  try {
+    await CronLog.create({
+      data: data as any,
     })
     resolve({})
   } catch (ex: any) {

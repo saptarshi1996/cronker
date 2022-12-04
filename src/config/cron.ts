@@ -1,6 +1,6 @@
 import schedule from 'node-schedule'
 
-import axios, { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig } from 'axios'
 
 import * as cronDao from '../dao/cron'
 
@@ -15,6 +15,7 @@ export default async function () {
         isActive: true,
       },
       select: {
+        id: true,
         cronExpression: true,
         requestPayload: true,
         requestMethod: true,
@@ -46,11 +47,11 @@ export default async function () {
         const queueName = queueKeyValue[cron.requestMethod as string]
         queueHelper.sendMessageToQueue({
           name: queueName,
-          data: payload,
+          data: {
+            data: payload,
+            cronId: cron.id,
+          },
         })
-
-        const response = await axios(payload)
-        console.log(response.data)
       })
     })
   } catch (ex: any) {

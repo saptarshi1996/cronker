@@ -1,3 +1,5 @@
+import ICronLog from "./cron-log"
+
 export default interface ICron {
   id?: number
 
@@ -14,4 +16,6 @@ export default interface ICron {
   createdAt?: Date
   updatedAt?: Date
   deletedAt?: Date
+
+  cronLogs?: ICronLog[]
 }

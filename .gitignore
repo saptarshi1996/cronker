@@ -105,9 +105,7 @@ dist
 # TernJS port file
 .tern-port
 
+build/
 
-crons/
-
-prisma/node_modules/
-prisma/generated/
-prisma/.env
+node_modules/
+.env

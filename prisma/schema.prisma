@@ -2,9 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  output        = "./generated"
-  binaryTargets = ["native", "linux-musl", "debian-openssl-1.1.x", "darwin"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -13,8 +11,11 @@ datasource db {
 }
 
 enum RequestMethod {
-  POST
   GET
+  POST
+  PATCH
+  PUT
+  DELETE
 }
 
 enum Status {
@@ -25,7 +26,7 @@ enum Status {
 model Cron {
   id Int @id @default(autoincrement())
 
-  name String @db.Text
+  name String @db.VarChar(255)
 
   cronExpression String? @db.VarChar(20)
 
@@ -35,11 +36,11 @@ model Cron {
 
   isActive Boolean? @default(true)
 
-  createdAt DateTime? @default(now())
-  updatedAt DateTime?
-  deletedAt DateTime?
+  created_at DateTime? @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
 
-  cronLog CronLog[]
+  cron_logs CronLog[]
 
   @@map("crons")
 }
@@ -47,18 +48,19 @@ model Cron {
 model CronLog {
   id Int @id @default(autoincrement())
 
-  response   String @db.Text
-  status     Status
+  response String @db.Text
 
-  started   DateTime
-  completed DateTime
+  status Status
 
-  cronId Int
-  cron   Cron @relation(fields: [cronId], references: [id])
+  startedAt   DateTime
+  completedAt DateTime
 
-  createdAt DateTime? @default(now())
-  updatedAt DateTime?
-  deletedAt DateTime?
+  created_at DateTime? @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  cron_id Int
+  cron    Cron @relation(fields: [cron_id], references: [id])
 
   @@map("cron_logs")
 }

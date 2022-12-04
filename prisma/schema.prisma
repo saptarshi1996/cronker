@@ -33,14 +33,15 @@ model Cron {
   requestMethod  RequestMethod @default(GET)
   requestUrl     String        @db.Text
   requestPayload String?       @db.Text
+  requestHeaders String?       @db.Text
 
   isActive Boolean? @default(true)
 
-  created_at DateTime? @default(now())
-  updated_at DateTime?
-  deleted_at DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
 
-  cron_logs CronLog[]
+  cronLogs CronLog[]
 
   @@map("crons")
 }
@@ -55,12 +56,12 @@ model CronLog {
   startedAt   DateTime
   completedAt DateTime
 
-  created_at DateTime? @default(now())
-  updated_at DateTime?
-  deleted_at DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
 
-  cron_id Int
-  cron    Cron @relation(fields: [cron_id], references: [id])
+  cronId Int
+  cron   Cron @relation(fields: [cronId], references: [id])
 
   @@map("cron_logs")
 }

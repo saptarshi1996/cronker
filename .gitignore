@@ -109,3 +109,5 @@ build/
 
 node_modules/
 .env
+
+venv

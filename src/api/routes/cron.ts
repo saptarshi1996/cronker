@@ -4,11 +4,11 @@ import {
 } from '@hapi/hapi'
 
 import {
-  createCron,
   getCron,
   listCron,
   deleteCron,
   updateCron,
+  createCron,
 } from '../../controllers/cron'
 
 import createCronValidation from '../../validations/cron/create-cron'

@@ -61,9 +61,7 @@ async function getCron(id: number) {
 async function updateCron(id: number, data: any) {
   try {
     const cron = await Cron.update({
-      where: {
-        id,
-      },
+      where: { id },
       data,
     })
 
@@ -76,9 +74,7 @@ async function updateCron(id: number, data: any) {
 async function deleteCron(id: number) {
   try {
     await Cron.delete({
-      where: {
-        id,
-      }
+      where: { id },
     })
 
     return Promise.resolve({})

@@ -1,8 +1,8 @@
 import { Request, ResponseToolkit } from "@hapi/hapi"
 
-import ICron from "../interfaces/models/cron"
-
 import cronDao from "../dao/cron"
+
+import ICron from "../interfaces/models/cron"
 
 import NotFoundError from "../errors/NotFoundError"
 import InternalServerError from "../errors/InternalServer"

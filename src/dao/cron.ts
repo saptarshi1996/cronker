@@ -16,7 +16,7 @@ async function createCron(data: any) {
   }
 }
 
-async function listCron() {
+async function listCron(limit?: number, offset?: number) {
   try {
     const cron = await Cron.findMany({
       select: {
@@ -28,6 +28,8 @@ async function listCron() {
         headers: true,
         payload: true,
       },
+      take: limit,
+      skip: offset,
     })
     return Promise.resolve(cron)
   } catch(ex: any) {

@@ -1,4 +1,4 @@
-import { Request, ResponseToolkit } from "@hapi/hapi"
+import { Request } from "@hapi/hapi"
 
 import cronDao from "../dao/cron"
 
@@ -7,9 +7,13 @@ import ICron from "../interfaces/models/cron"
 import NotFoundError from "../errors/NotFoundError"
 import InternalServerError from "../errors/InternalServer"
 
-export async function listCron(req: Request, h: ResponseToolkit) {
+export async function listCron(req: Request) {
   try {
-    const cron = await cronDao.listCron()
+    const { limit, offset } = req.query as {
+      limit: number,
+      offset: number,
+    }
+    const cron = await cronDao.listCron(limit, offset)
     return {
       cron,
     }
@@ -18,24 +22,22 @@ export async function listCron(req: Request, h: ResponseToolkit) {
   }
 }
 
-export async function createCron(req: any, h: ResponseToolkit) {
+export async function createCron(req: Request) {
   try {
-
     const cron = req.payload as ICron
-
-    await cronDao.createCron(cron)
+    const newCron = await cronDao.createCron(cron)
 
     return {
       'message': 'Cron created successfully',
+      'cron': newCron,
     }
   } catch (ex: any) {
     return new InternalServerError(ex.message)
   }
 }
 
-export async function getCron(req: Request, h: ResponseToolkit) {
+export async function getCron(req: Request) {
   try {
-
     const { cron_id: cronId } = req.params as {
       cron_id: number,
     }
@@ -52,10 +54,9 @@ export async function getCron(req: Request, h: ResponseToolkit) {
     return new InternalServerError(ex.message)
   }
 }
-
-export async function updateCron(req: Request, h: ResponseToolkit) {
+  
+export async function updateCron(req: Request) {
   try {
-
     const cron = req.payload as ICron
     
     const { cron_id: cronId } = req.params as {
@@ -77,9 +78,8 @@ export async function updateCron(req: Request, h: ResponseToolkit) {
   }
 }
 
-export async function deleteCron(req: Request, h: ResponseToolkit) {
+export async function deleteCron(req: Request) {
   try {
-
     const { cron_id: cronId } = req.params as {
       cron_id: number,
     }

@@ -14,6 +14,7 @@ import {
 import createCronValidation from '../../validations/cron/create-cron'
 import getCronValidation from '../../validations/cron/get-cron'
 import updateCronValidation from '../../validations/cron/update-cron'
+import listCronValidation from '../../validations/cron/list-cron'
 
 const tags = ['api', 'Cron']
 
@@ -40,6 +41,7 @@ export default {
           description: 'Get Cron List',
           tags,
           handler: listCron,
+          validate: listCronValidation,
         }
       },
       {

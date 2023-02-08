@@ -14,6 +14,8 @@
     "@hapi/lab": "^25.1.0",
     "@types/hapi__inert": "^5.2.4",
     "@types/hapi__vision": "^5.5.4",
+    "@types/node": "^18.11.18",
+    "@types/sinon": "^10.0.13",
     "nodemon": "^2.0.20",
     "prisma": "4.9.0",
     "ts-node": "^10.9.1",

@@ -1,25 +1,29 @@
-import {
-	Server,
-	ServerRegisterPluginObject,
-} from '@hapi/hapi'
+import { Server, ServerRegisterPluginObject } from '@hapi/hapi'
 import Inert from '@hapi/inert'
 import Vision from '@hapi/vision'
 import HapiSwagger from 'hapi-swagger'
 
-import routeLogger from '../middlewares/route-logger'
+import environment from '../../config/environment'
+
 import response from '../middlewares/response'
 
 import routes from '../routes'
 
-const server = new Server({
-	host: 'localhost',
-	port: 10019,
-	routes: {
-		cors: true,
-	},
-})
+const {
+	PORT,
+	HOST,
+} = environment
 
 export default async function getServer(): Promise<Server> {
+
+  const server = new Server({
+    host: HOST,
+    port: PORT,
+    routes: {
+      cors: true,
+    },
+  })
+
 	const swaggerOptions: HapiSwagger.RegisterOptions = {
     info: {
       title: 'Cronker API Documentation',
@@ -52,8 +56,7 @@ export default async function getServer(): Promise<Server> {
       prefix: '/api',
     },
   })
-
-  server.ext('onRequest', routeLogger)
+  
   server.ext('onPreResponse', response)
 
   await server.initialize()

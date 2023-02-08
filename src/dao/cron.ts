@@ -1,16 +1,17 @@
 import { PrismaClient } from '@prisma/client'
+import ICron from '../interfaces/models/cron'
 
 const {
   cron: Cron,
 } = new PrismaClient()
 
-async function createCron(data: any) {
+async function createCron(data: any): Promise<ICron> {
   try {
     const cron = await Cron.create({
       data,
     })
 
-    return Promise.resolve(cron)
+    return Promise.resolve(cron as ICron)
   } catch (ex: any) {
     return Promise.reject(new Error(ex))
   }
